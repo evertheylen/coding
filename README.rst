@@ -8,6 +8,10 @@ Since there is also a project throughout the year concerning the "old" crypto pa
 
 0. Finite fields: **TODO**
 
+1. (Introduction etc: skipped)
+
+2. (Enigma: skipped)
+
 3. Discrete logarithm: **TODO**
 
 4. RSA: **TODO**

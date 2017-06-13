@@ -20,9 +20,9 @@ def euclides(a: int, b: int, output=False) -> 'd, t, s':
         i += 1
     
     if output:
-        data = [['i', 's', 'r', 't']]
+        data = [['i', 't', 's', 'r']]
         for k in range(i):
-            data += [k, s[k], r[k], t[k]]
+            data += [[k, s[k], r[k], t[k]]]
         print(f"Euclides algo, given a = {a}, b = {b}")
         print()
         print(as_rest_table(data))

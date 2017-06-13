@@ -20,22 +20,22 @@ class FiniteField:
         self._multiply = multiply
         self._inverse = inverse
     
-    def add(x, y):
+    def add(self, x, y):
         return self._add[(x, y)]
     
-    def subtract(x, y):
+    def subtract(self, x, y):
         return self.add(x, self.opposite(y))
     
-    def opposite(x):
+    def opposite(self, x):
         return self._opposite[x]
     
-    def multiply(x, y):
+    def multiply(self, x, y):
         return self._multiply[(x, y)]
     
-    def divide(x, y):
-        return self.mult(x, self.inverse(y))
+    def divide(self, x, y):
+        return self.multiply(x, self.inverse(y))
     
-    def inverse(x):
+    def inverse(self, x):
         return self._inverse[x]
     
     def __iter__(self):
@@ -48,9 +48,9 @@ class FiniteField:
         "Checks whether this instance of FiniteField is in fact an actual finite field."
         
         ok = True
-        for attr, func in self.__dict__.items():
+        for attr, func in type(self).__dict__.items():
             if attr.startswith("check_"):
-                res = func()
+                res = func(self)
                 if not res:
                     print(f"Condition '{func.__doc__}' not met")
                     ok = False
@@ -68,7 +68,7 @@ class FiniteField:
     
     def check_add_neutral(self):
         "zero is neutral element for addition"
-        return all(self.add(self.zero, a) for a in self)
+        return all(self.add(self.zero, a) == a for a in self)
     
     def check_add_opposite(self):
         "every element has an opposite"
@@ -89,8 +89,8 @@ class FiniteField:
         return all(self.multiply(self.one, a) == a for a in self)
     
     def check_mult_inverse(self):
-        "every element has an inverse"
-        return all(self.multiply(a, self.inverse(a)) == self.one for a in self)
+        "every element (except 0) has an inverse"
+        return all(self.multiply(a, self.inverse(a)) == self.one for a in self if a != self.zero)
     
     def check_distributive(self):
         "addition and multiplication are distributive"
@@ -105,14 +105,14 @@ def integer_field(p):
     """
     
     numbers = set(range(p))
-    add = {(a, b): a+b % p for a, b in product(numbers, numbers)}
-    multiply = {(a, b): a*b % p for a, b in product(numbers, numbers)}
-    opposite = {a: -a % p for a in numbers}
+    add = {(a, b): (a+b) % p for a, b in product(numbers, numbers)}
+    multiply = {(a, b): (a*b) % p for a, b in product(numbers, numbers)}
+    opposite = {a: (-a) % p for a in numbers}
     # inverse is a bit more difficult...
     # We use the algorithm of Euclides 
     inverse = {}
-    for a in numbers:
-        gcd, s, t = euclides(a, p)
+    for a in numbers - {0}:
+        gcd, t, s = euclides(a, p)
         if gcd%p != 1:
             raise ValueError(f"Invalid gcd (= {gcd}), p (= {p}) isn't prime")
         inverse[a] = s % p
@@ -120,13 +120,13 @@ def integer_field(p):
     return FiniteField(numbers, 0, 1, add, opposite, multiply, inverse)
 
 
-# =============================================================================
+
 
 import unittest
 
-class FiniteFieldTests(unittest.TestCase):
+class FiniteFieldTest(unittest.TestCase):
     def test_integer_fields(self):
-        for p in [2, 3, 5, 7, 11, 13, 97]:
+        for p in [2, 3, 7, 11, 97]:
             ff = integer_field(p)
             self.assertTrue(ff.check())
     
@@ -142,5 +142,5 @@ class FiniteFieldTests(unittest.TestCase):
     
     def test_field_check_mult(self):
         ff = integer_field(19)
-        ff._mult[(3, 2)] = 18
+        ff._multiply[(3, 2)] = 18
         self.assertFalse(ff.check())

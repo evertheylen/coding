@@ -165,13 +165,12 @@ class FiniteFieldTests(unittest.TestCase):
         ff._mul[(3, 2)] = 18
         self.assertFalse(ff.check())
     
-    @unittest.skip("Rijndael takes a long time")
-    def test_poly_field_rijndael(self):
-        g = Poly([1, 0, 0, 0, 1, 1, 0, 1, 1], Symbol('X'))
+    def test_poly_field_16(self):
+        g = Poly([1, 0, 0, 1, 1], Symbol('X'))
         ff = FiniteField.modulo_poly(2, g)
         self.assertTrue(ff.check())
     
-    def test_poly_field_simple(self):
+    def test_poly_field_27(self):
         # https://en.wikipedia.org/wiki/Finite_field#GF.288.29_and_GF.2827.29
         g = Poly([1, 0, 2, 2], Symbol('X'))
         ff = FiniteField.modulo_poly(3, g)

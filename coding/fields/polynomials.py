@@ -1,17 +1,9 @@
 
 from itertools import product
-from sympy import Poly, degree
 
-from coding.util import defzip
+from coding.util import defzip, Symbol, Poly, degree
 from .base import Field, Integers
 
-# A note on sympy:
-# Sympy is a big library and basically everything (esp. the field stuff) is already
-# implemented there. For this reason; we clearly define what will be used from sympy
-# and what not. Sympy is used solely for the polynomials and their basic operators,
-# just like we use Python for integers and their basic operators.
-#
-# Polynomials are more than just expressions, they carry their variable with them!
 
 class PolynomialField(Field):
     key = staticmethod(lambda p: degree(p)+1)
@@ -93,7 +85,6 @@ import unittest
 
 class IntPolyTests(unittest.TestCase):
     def setUp(self):
-        from sympy import Symbol
         self.X = Symbol('X')
         self.PF = PolynomialField(self.X)
     
@@ -119,7 +110,6 @@ class IntPolyTests(unittest.TestCase):
 class RealPolyTests(unittest.TestCase):
     def setUp(self):
         from coding.fields.base import Reals
-        from sympy import Symbol
         self.X = Symbol('X')
         self.PF = PolynomialField(self.X, Reals)
     

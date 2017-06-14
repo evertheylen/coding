@@ -15,6 +15,7 @@ if "--all" in sys.argv:
 
 from .fields import *
 from .util import *
+from .dlp import *
 
 if __name__ == '__main__':
     unittest.main(buffer=True)

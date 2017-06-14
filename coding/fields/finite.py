@@ -1,8 +1,7 @@
 
 from itertools import product
-from sympy import Poly, Symbol
 
-from coding.util import euclides
+from coding.util import euclides, as_rest_table, Poly, Symbol
 from .base import Field, Integers
 from .polynomials import PolynomialField
 
@@ -38,7 +37,9 @@ class FiniteField(Field):
         return self._inv[x]
     
     def __iter__(self):
-        return iter(self.numbers)
+        yield self.zero
+        yield self.one
+        yield from self.numbers - {self.zero, self.one}
     
     def __contains__(self, item):
         return item in self.numbers
@@ -47,6 +48,58 @@ class FiniteField(Field):
         return len(self.numbers)
     
     __str__ = __repr__ = lambda s: f'GF({len(s.numbers)})'
+    
+    
+    # Generator and subgroup stuff ........................
+    
+    def mul_subgroup(self, gen):
+        return {self.pow(gen, i) for i in range(len(self))}
+    
+    def mul_generators(self):
+        mul_group = self.numbers - {self.zero}
+        return {el for el in self if self.mul_subgroup(el) == mul_group}
+    
+    
+    # Tables and info .....................................
+    
+    def table_binary(self, op):
+        n = list(self)
+        data = [[op.__name__] + list(map(str, n))]
+        for a in n:
+            row = [str(a)]
+            for b in n:
+                try:
+                    row.append(str(op(a, b)))
+                except KeyError:
+                    row.append('/')
+            data.append(row)
+        return as_rest_table(data, full=True)
+    
+    def table_mono(self, op):
+        n = list(self)
+        data = [[op.__name__] + list(map(str, n)), ['']]
+        for a in n:
+            try:
+                data[1].append(str(op(a)))
+            except KeyError:
+                data[1].append(' ')
+        return as_rest_table(data, full=True)
+    
+    def table_powers(self, X):
+        data = [['pow'] + list(range(len(self))),
+                [str(X)] + [str(self.pow(X, i)) for i in range(len(self))]]
+        return as_rest_table(data, full=True)
+    
+    def info(self, X=None):
+        s = ''
+        s += f"Info for {self}"
+        s += '\n' + len(s)*'-'
+        s += f"\n\nAddition:\n\n{self.table_binary(self.add)}"
+        s += f"\n\nNegation:\n\n{self.table_mono(self.neg)}"
+        s += f"\n\nMultiplication:\n\n{self.table_binary(self.mul)}"
+        s += f"\n\nInversion:\n\n{self.table_mono(self.inv)}"
+        if X: s += f"\n\nPowers:\n\n{self.table_powers(X)}"
+        print(s)
     
     
     # Checks validness ....................................

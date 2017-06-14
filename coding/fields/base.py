@@ -1,4 +1,6 @@
 
+import math
+
 __all__ = ['Field', 'Reals', 'Integers']
 
 class Field:
@@ -20,11 +22,23 @@ class Field:
     def divmod(self, x, y):
         return self.div(x, y), self.mod(x, y)
     
+    def pow(self, x, n: int):
+        res = self.one
+        for i in range(n):
+            res = self.mul(res, x)
+        return res
+    
     def all_mod(self, x):
         s = set()
         for i in self:
             s.add(self.mod(i, x))
         return s
+    
+    def from_int(self, i: int):
+        res = self.zero
+        for i in range(i):
+            res = self.add(res, self.one)
+        return res
     
     def __len__(self):
         return float('inf')
@@ -46,6 +60,9 @@ class _RealField(Field):
     def mul(self, x, y):
         return x * y
     
+    def pow(self, x, n):
+        return math.pow(x, n)
+    
     def div(self, x, y):
         return x / y
     
@@ -54,6 +71,9 @@ class _RealField(Field):
     
     def mod(self, x, y):
         return 0
+    
+    def from_int(self, i):
+        return float(i)
     
     def __contains__(self, x):
         try:
@@ -68,6 +88,9 @@ Reals = _RealField()
 
 
 class _IntegerField(_RealField):
+    def pow(self, x, n):
+        return pow(x, n)
+
     def div(self, x, y):
         return x // y
     
@@ -76,6 +99,9 @@ class _IntegerField(_RealField):
     
     def all_mod(self, x):
         return set(range(x))
+    
+    def from_int(self, i):
+        return i
     
     def __contains__(self, x):
         try:

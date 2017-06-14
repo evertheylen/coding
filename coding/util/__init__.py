@@ -1,3 +1,3 @@
 
 from .etc import *
-from .euclides import *
+from .algos import *

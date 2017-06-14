@@ -5,7 +5,7 @@
 Content
 =======
 
-This is a Python implementation of (parts of) the `"Codetheorie" course at UAntwerpen <https://www.uantwerpen.be/popup/opleidingsonderdeel.aspx?catalognr=1001WETCOD&taal=nl&aj=2015>`_, given by Stijn Symens.
+This is a Python implementation of (parts of) the `"Codetheorie" course at UAntwerpen <https://www.uantwerpen.be/popup/opleidingsonderdeel.aspx?catalognr=1001WETCOD&taal=en&aj=2015>`_, given by Stijn Symens.
 
 Since there is also a project throughout the year concerning the "old" crypto part (Vigenère, Enigma, ...) of the course, this project will not try to implement that (chapters 1 and 2). Instead it focuses on the other chapters:
 
@@ -45,4 +45,4 @@ To use and experiment with the code, I use Jupyter. However, I don't want output
 Support
 =======
 
-*There is only one version, the latest version.* I make full use of the glorious f-strings, so Python 3.6 or newer is required.
+*There is only one version, the latest version.* I make full use of the glorious f-strings, so Python 3.6 or newer is required. Required libraries are listed in ``requirements.txt``.

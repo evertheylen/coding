@@ -14,6 +14,7 @@ if "--all" in sys.argv:
     sys.argv.remove("--all")
 
 from .fields import *
+from .util import *
 
 if __name__ == '__main__':
     unittest.main(buffer=True)

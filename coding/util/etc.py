@@ -45,3 +45,30 @@ class multimap(defaultdict):
                 raise NotFlat(v)
             d[k] = v.pop()
         return d
+
+def defzip(default, *iters):
+    iters = [iter(it) for it in iters]
+    exhausted = [False] * len(iters)
+    while True:
+        values = []
+        for i, it in enumerate(iters):
+            if exhausted[i]:
+                values.append(default)
+            else:
+                try:
+                    values.append(next(it))
+                except StopIteration:
+                    values.append(default)
+                    exhausted[i] = True
+            if all(exhausted): return
+        yield tuple(values)
+
+
+
+import unittest
+
+class EtcTests(unittest.TestCase):
+    def test_defzip(self):
+        self.assertEqual(list(defzip(5, [1, 2], [1, 2, 3, 4])), [(1,1), (2,2), (5,3), (5,4)])
+
+        

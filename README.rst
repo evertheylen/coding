@@ -9,13 +9,13 @@ This is a Python implementation of (parts of) the `"Codetheorie" course at UAntw
 
 Since there is also a project throughout the year concerning the "old" crypto part (Vigenère, Enigma, ...) of the course, this project will not try to implement that (chapters 1 and 2). Instead it focuses on the other chapters:
 
-0. Finite fields: **TODO**
+0. Finite fields: *done*
 
 1. (Introduction etc: skipped)
 
 2. (Enigma: skipped)
 
-3. Discrete logarithm: **TODO**
+3. Discrete logarithm: *partly done*
 
 4. RSA: **TODO**
 
